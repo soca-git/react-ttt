@@ -1,6 +1,9 @@
 # React Tic-Tac-Toe
 
-> Code-along with extras, based on a popular 'Intro to React' tutorial.  
+> Tic-Tac-Toe game based on a popular 'Intro to React' tutorial.  
 > https://reactjs.org/tutorial/tutorial.html  
+
+## Finished solution:
+![react-ttt](./react-ttt.gif)
 
 ---
