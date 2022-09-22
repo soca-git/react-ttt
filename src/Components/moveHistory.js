@@ -8,12 +8,10 @@ function MoveHistory(props)
 
     const moves = props.history.map((move, moveNumber) => {
         
-        const description = moveNumber ? `Go to move ${moveNumber}` : `Go to game start`;
+        const description = moveNumber ? `${moveNumber}` : `0`;
 
         return (
-            <li key={moveNumber}>
-                <button onClick={() => props.jumpTo(moveNumber)}>{description}</button>
-            </li>
+            <button key={moveNumber} className="board-state" onClick={() => props.jumpTo(moveNumber)}>{description}</button>
         );
     });
     // Here, we map the history array of board states to a list element containing a button.
@@ -21,7 +19,8 @@ function MoveHistory(props)
 
     return (
         <div className="game-info">
-            <ul>{moves}</ul>
+            <div>Board States:</div>
+            <div className="board-states">{moves}</div>
         </div>
     );
 }
