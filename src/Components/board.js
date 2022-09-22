@@ -15,6 +15,7 @@ class Board extends React.Component {
     logClick(i) {
         console.log(`clicked square ${i}!`);
     }
+    // note; the constructor here could be deleted, we aren't using it anymore!
 
     whenSquareClicked(i) {
         this.logClick(i);
