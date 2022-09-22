@@ -22,7 +22,3 @@ export function calculateWinner(squares) {
 
     return null;
 }
-
-export function refreshPage() {
-    window.location.reload(true);
-}

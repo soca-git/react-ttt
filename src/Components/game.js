@@ -1,23 +1,29 @@
 import React from "react";
-import Refresh from "./refresh";
+import NewGame from "./newGame";
 import Status from "./status";
 import Board from "./board"
 import MoveHistory from "./moveHistory";
 import { calculateWinner } from "../Utils/utils"
 
+const initialState = {
+    history: [{ squares: Array(9).fill(null) }],
+    xIsNext: true,
+    winningCombination: null,
+    winningPlayer: null,
+    moveNumber: 0
+};
+
 class Game extends React.Component
 {
     constructor(props) {
-        super(props)
+        super(props);
 
-        this.state = {
-            history: [{squares: Array(9).fill(null)}],
-            xIsNext: true,
-            winningCombination: null,
-            winningPlayer: null,
-            moveNumber: 0
-        }
+        this.state = initialState
         // Uplifted the square's state into the game component.
+    }
+
+    refreshState() {
+        this.setState(initialState);
     }
 
     isGameOver()
@@ -89,7 +95,7 @@ class Game extends React.Component
             <Status xIsNext={this.state.xIsNext} winningPlayer={this.state.winningPlayer} gameOver={this.isGameOver()} />
             <Board squares={this.state.history[this.state.moveNumber].squares} onClick={(i) => this.whenClicked(i)} winningSquares={this.state.winningCombination} />
             <MoveHistory history={this.state.history} jumpTo={(step) => this.jumpTo(step)} gameOver={this.isGameOver()} />
-            <Refresh gameOver={this.isGameOver()} />
+            <NewGame gameOver={this.isGameOver()} onClick={() => this.refreshState()} />
         </div>
         );
     }
