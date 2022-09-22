@@ -1,10 +1,11 @@
 import React from "react";
 import Status from "./status";
 import Board from "./board"
+import MoveHistory from "./moveHistory";
 import {CalculateWinner} from "../Utils/calculateWinner"
 
-class Game extends React.Component {
-
+class Game extends React.Component
+{
     constructor(props) {
         super(props)
 
@@ -12,31 +13,32 @@ class Game extends React.Component {
             history: [{squares: Array(9).fill(null)}],
             xIsNext: true,
             winningPlayer: null,
-            stepNumber: 0
+            moveNumber: 0
         }
-        // uplifted the square's state into the game component.
+        // Uplifted the square's state into the game component.
     }
 
-    jumpTo(step) {
+    isGameOver()
+    {
+        if (this.state.winningPlayer != null || this.state.history.length > 9)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    jumpTo(move) {
         this.setState({
-            stepNumber: step
+            moveNumber: move
         });
+        // We can traverse the game's history by setting the moveNumber state.
+        // This causes a re-rendering of the board, with the board's squares property
+        // passed as history[moveNumber]. 
     }
 
     whenClicked(i) {
-        if (this.state.history[this.state.stepNumber][i] != null)
-        {
-            return;
-        }
-        // prevent the same square being set multiple times.
-
-        if (this.state.winningPlayer != null)
-        {
-            return;
-        }
-        // prevent the game from continuing if a player has won.
-
-        const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        const history = this.state.history.slice(0, this.state.moveNumber + 1);
         const currentSquares = this.state.history[history.length - 1].squares;
         const currentSquaresCopy = currentSquares.slice();
         // By copying the square's state into a new object, we are making changes "immutable".
@@ -45,41 +47,34 @@ class Game extends React.Component {
         // Comparing mutable objects (where we change the object's data directly) is much more involved,
         // requiring traversal of the object's tree and comparison to previous copies of itself.
 
+        if (currentSquares[i] != null)
+        {
+            return;
+        }
+        // Prevent the same square being set multiple times.
+
+        if (this.isGameOver())
+        {
+            return;
+        }
+        // Prevent the game from continuing if the game is over.
+
         currentSquaresCopy[i] = this.state.xIsNext ? 'X' : 'O';
         this.setState({
             history: history.concat([{squares: currentSquaresCopy}]),
-            mostRecentSquares: currentSquaresCopy,
             // concat() doesn't mutate the original history array, like push().
             xIsNext: !this.state.xIsNext,
             winningPlayer: CalculateWinner(currentSquaresCopy),
-            stepNumber: history.length
+            moveNumber: history.length,
         });
     }
 
     render() {
-        const history = this.state.history;
-        const currentSquares = history[this.state.stepNumber].squares;
-        console.log(history);
-
-        const moves = history.map((step, move) => {
-            const description = move ? `Go to move ${move}` : `Go to game start`;
-
-            return (
-                <li key={move}>
-                    <button onClick={() => this.jumpTo(move)}>{description}</button>
-                </li>
-            );
-        });
-
         return (
         <div className="game">
-            <Status xIsNext={this.state.xIsNext} winningPlayer={this.state.winningPlayer} />
-            <div className="game-board">
-            <Board squares={currentSquares} onClick={(i) => this.whenClicked(i)}/>
-            </div>
-            <div className="game-info">
-                <ol>{moves}</ol>
-            </div>
+            <Status xIsNext={this.state.xIsNext} winningPlayer={this.state.winningPlayer} gameOver={this.isGameOver()} />
+            <Board squares={this.state.history[this.state.moveNumber].squares} onClick={(i) => this.whenClicked(i)} />
+            <MoveHistory history={this.state.history} jumpTo={(step) => this.jumpTo(step)} gameOver={this.isGameOver()} />
         </div>
         );
     }

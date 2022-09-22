@@ -1,11 +1,11 @@
 import React from "react";
 import Square from "./square";
 
-class Board extends React.Component {
-
+class Board extends React.Component
+{
     constructor(props) {
         super(props);
-        // in js classes, always need to call the parent (super) class constructor.
+        // In js classes, always need to call the parent (super) class constructor.
 
         console.log(props);
         // props is saved as a property of this object when the object is initialized.
@@ -15,12 +15,12 @@ class Board extends React.Component {
     logClick(i) {
         console.log(`clicked square ${i}!`);
     }
-    // note; the constructor here could be deleted, we aren't using it anymore!
+    // Note; the constructor here could be deleted, we aren't using it anymore!
 
     whenSquareClicked(i) {
         this.logClick(i);
         this.props.onClick(i);
-        // invoke the 'onClick' function passed in from Game,
+        // Invoke the 'onClick' function passed in from Game,
         // passing 'i', the index of the square, into the onClick function passed down from the parent 'Game' component.
     }
 
@@ -30,7 +30,7 @@ class Board extends React.Component {
 
     render() {
         console.log(this.props);
-        // the Board component is re-rendered everytime it's parent's (Game) state changes.
+        // The Board component is re-rendered everytime it's parent's (Game) state changes.
         // Notice how the updated props are passed in each time.
 
         return (

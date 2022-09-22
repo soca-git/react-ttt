@@ -1,9 +1,14 @@
 
-function Status(props) {
-
-    if (props.winningPlayer != null)
+function Status(props)
+{
+    if (props.gameOver)
     {
-        return <div className="status">Player {props.winningPlayer} has won!</div>;
+        if (props.winningPlayer != null)
+        {
+            return <div className="status">Player {props.winningPlayer} has won!</div>;
+        }
+
+        return <div className="status">Game Over</div>;
     }
     
     return <div className="status">Next player: {props.xIsNext ? 'X' : 'O'}</div>;
