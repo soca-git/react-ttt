@@ -1,7 +1,5 @@
 import React from "react";
-import Status from "./status";
 import Square from "./square";
-import {CalculateWinner} from "../Utils/calculateWinner"
 
 class Board extends React.Component {
 
@@ -11,57 +9,31 @@ class Board extends React.Component {
 
         console.log(props);
         // props is saved as a property of this object when the object is initialized.
-
-        this.state = {
-            squares: Array(9).fill(null),
-            xIsNext: true,
-            winningPlayer: null
-        }
-        // uplift the square's state into the parent(board) component.
+        // This only happens when the site loads. The constructor is not called again during re-rendering, but it's props are updated.
     }
 
     logClick(i) {
         console.log(`clicked square ${i}!`);
     }
 
-    whenClicked(i) {
-        if (this.state.squares[i] != null)
-        {
-            return;
-        }
-        // prevent the same square being set multiple times.
-
-        if (this.state.winningPlayer != null)
-        {
-            return;
-        }
-        // prevent the game from continuing if a player has won.
-
+    whenSquareClicked(i) {
         this.logClick(i);
-
-        const squaresCopy = this.state.squares.slice();
-        // By copying the square's state into a new object, we are making changes "immutable".
-        // This makes otherwise complex features easier to implement, like storing the game's history,
-        // since detecting changes between immutable objects is considerably easier than mutable ones.
-        // Comparing mutable objects (where we change the object's data directly) is much more involved,
-        // requiring traversal of the object's tree and comparison to previous copies of itself.
-
-        squaresCopy[i] = this.state.xIsNext ? 'X' : 'O';
-        this.setState({
-            squares: squaresCopy,
-            xIsNext: !this.state.xIsNext,
-            winningPlayer: CalculateWinner(squaresCopy)
-        });
+        this.props.onClick(i);
+        // invoke the 'onClick' function passed in from Game,
+        // passing 'i', the index of the square, into the onClick function passed down from the parent 'Game' component.
     }
 
     renderSquare(i) {
-        return <Square number={i} value={this.state.squares[i]} onClick= {() => this.whenClicked(i)} />;
+        return <Square number={i} value={this.props.squares[i]} onClick= {() => this.whenSquareClicked(i)} />;
     }
 
     render() {
+        console.log(this.props);
+        // the Board component is re-rendered everytime it's parent's (Game) state changes.
+        // Notice how the updated props are passed in each time.
+
         return (
         <>
-            <Status xIsNext={this.state.xIsNext} winningPlayer={this.state.winningPlayer} />
             <div className="board">
                 <div className="board-row">
                 {this.renderSquare(0)}
