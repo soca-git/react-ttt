@@ -1,5 +1,6 @@
 import React from "react";
 import Square from "./square";
+import {CalculateWinner} from "../Utils/calculateWinner"
 
 class Board extends React.Component {
 
@@ -12,7 +13,8 @@ class Board extends React.Component {
 
         this.state = {
             squares: Array(9).fill(null),
-            xIsNext: true
+            xIsNext: true,
+            winningPlayer: null
         }
         // uplift the square's state into the parent(board) component.
     }
@@ -28,6 +30,12 @@ class Board extends React.Component {
         }
         // prevent the same square being set multiple times.
 
+        if (this.state.winningPlayer != null)
+        {
+            return;
+        }
+        // prevent the game from continuing if a player has won.
+
         this.logClick(i);
 
         const squaresCopy = this.state.squares.slice();
@@ -40,8 +48,9 @@ class Board extends React.Component {
         squaresCopy[i] = this.state.xIsNext ? 'X' : 'O';
         this.setState({
             squares: squaresCopy,
-            xIsNext: !this.state.xIsNext
-        }); 
+            xIsNext: !this.state.xIsNext,
+            winningPlayer: CalculateWinner(squaresCopy)
+        });
     }
 
     renderSquare(i) {
@@ -49,7 +58,14 @@ class Board extends React.Component {
     }
 
     render() {
-        const status = `Next player: ${this.state.xIsNext ? 'X' : 'O'}`;
+        let status;
+        if (this.state.winningPlayer != null)
+        {
+            status = `Player ${this.state.winningPlayer} has won!`;
+        }
+        else {
+            status = `Next player: ${this.state.xIsNext ? 'X' : 'O'}`;
+        }
 
         return (
         <>
