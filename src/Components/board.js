@@ -1,4 +1,5 @@
 import React from "react";
+import Status from "./status";
 import Square from "./square";
 import {CalculateWinner} from "../Utils/calculateWinner"
 
@@ -58,18 +59,9 @@ class Board extends React.Component {
     }
 
     render() {
-        let status;
-        if (this.state.winningPlayer != null)
-        {
-            status = `Player ${this.state.winningPlayer} has won!`;
-        }
-        else {
-            status = `Next player: ${this.state.xIsNext ? 'X' : 'O'}`;
-        }
-
         return (
         <>
-            <div className="status">{status}</div>
+            <Status xIsNext={this.state.xIsNext} winningPlayer={this.state.winningPlayer} />
             <div className="board">
                 <div className="board-row">
                 {this.renderSquare(0)}
