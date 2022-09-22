@@ -1,8 +1,9 @@
 import React from "react";
+import Refresh from "./refresh";
 import Status from "./status";
 import Board from "./board"
 import MoveHistory from "./moveHistory";
-import {CalculateWinner} from "../Utils/calculateWinner"
+import { calculateWinner } from "../Utils/utils"
 
 class Game extends React.Component
 {
@@ -40,7 +41,7 @@ class Game extends React.Component
 
     calculateWinner(squares)
     {
-        var winningCombination = CalculateWinner(squares);
+        var winningCombination = calculateWinner(squares);
         if (winningCombination != null)
         {
             this.state.winningPlayer = squares[winningCombination[0]];
@@ -88,6 +89,7 @@ class Game extends React.Component
             <Status xIsNext={this.state.xIsNext} winningPlayer={this.state.winningPlayer} gameOver={this.isGameOver()} />
             <Board squares={this.state.history[this.state.moveNumber].squares} onClick={(i) => this.whenClicked(i)} winningSquares={this.state.winningCombination} />
             <MoveHistory history={this.state.history} jumpTo={(step) => this.jumpTo(step)} gameOver={this.isGameOver()} />
+            <Refresh gameOver={this.isGameOver()} />
         </div>
         );
     }

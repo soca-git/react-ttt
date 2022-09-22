@@ -99,3 +99,16 @@ button:hover {
   text-align: center;
   text-decoration: none;
 }
+
+.refresh-button {
+  margin: 5px;
+  margin-top: 20px;
+  padding: 5px 10px;
+  background: linear-gradient(to bottom right, #EF4765, #FF9A5A);
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-size: 20px;
+  outline: transparent;
+  text-align: center;
+  text-decoration: none;
+}

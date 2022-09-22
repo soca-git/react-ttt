@@ -1,5 +1,5 @@
 
-export function CalculateWinner(squares) {
+export function calculateWinner(squares) {
     const lines = [
         [0, 1, 2],
         [3, 4, 5],
@@ -21,4 +21,8 @@ export function CalculateWinner(squares) {
     // if one of the win conditions is satisfied, return the winning combination.
 
     return null;
+}
+
+export function refreshPage() {
+    window.location.reload(true);
 }
