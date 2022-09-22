@@ -65,6 +65,10 @@ body {
   font-weight: bold;
 }
 
+.winning-square {
+  background: lawngreen;
+}
+
 .board-states {
   width: 200px;
   padding: 0px;

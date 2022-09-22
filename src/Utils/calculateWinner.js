@@ -15,10 +15,10 @@ export function CalculateWinner(squares) {
     for (let i = 0; i < lines.length; i++) {
         const [a, b, c] = lines[i];
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-            return squares[a];
+            return lines[i];
         }
     }
-    // if one of the win conditions is satisfied, return the winning symbol ('X' or 'O').
+    // if one of the win conditions is satisfied, return the winning combination.
 
     return null;
 }

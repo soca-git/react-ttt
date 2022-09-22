@@ -12,6 +12,7 @@ class Game extends React.Component
         this.state = {
             history: [{squares: Array(9).fill(null)}],
             xIsNext: true,
+            winningCombination: null,
             winningPlayer: null,
             moveNumber: 0
         }
@@ -20,7 +21,7 @@ class Game extends React.Component
 
     isGameOver()
     {
-        if (this.state.winningPlayer != null || this.state.history.length > 9)
+        if (this.state.winningCombination != null || this.state.history.length > 9)
         {
             return true;
         }
@@ -35,6 +36,17 @@ class Game extends React.Component
         // We can traverse the game's history by setting the moveNumber state.
         // This causes a re-rendering of the board, with the board's squares property
         // passed as history[moveNumber]. 
+    }
+
+    calculateWinner(squares)
+    {
+        var winningCombination = CalculateWinner(squares);
+        if (winningCombination != null)
+        {
+            this.state.winningPlayer = squares[winningCombination[0]];
+        }
+        
+        return winningCombination;
     }
 
     whenClicked(i) {
@@ -60,11 +72,12 @@ class Game extends React.Component
         // Prevent the game from continuing if the game is over.
 
         currentSquaresCopy[i] = this.state.xIsNext ? 'X' : 'O';
+
         this.setState({
             history: history.concat([{squares: currentSquaresCopy}]),
             // concat() doesn't mutate the original history array, like push().
             xIsNext: !this.state.xIsNext,
-            winningPlayer: CalculateWinner(currentSquaresCopy),
+            winningCombination: this.calculateWinner(currentSquaresCopy),
             moveNumber: history.length,
         });
     }
@@ -73,7 +86,7 @@ class Game extends React.Component
         return (
         <div className="game">
             <Status xIsNext={this.state.xIsNext} winningPlayer={this.state.winningPlayer} gameOver={this.isGameOver()} />
-            <Board squares={this.state.history[this.state.moveNumber].squares} onClick={(i) => this.whenClicked(i)} />
+            <Board squares={this.state.history[this.state.moveNumber].squares} onClick={(i) => this.whenClicked(i)} winningSquares={this.state.winningCombination} />
             <MoveHistory history={this.state.history} jumpTo={(step) => this.jumpTo(step)} gameOver={this.isGameOver()} />
         </div>
         );

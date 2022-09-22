@@ -1,6 +1,16 @@
 import React from "react";
 
 function Square(props) {
+    
+    if (props.winningSquares != null && props.winningSquares.includes(props.number))
+    {
+        return (
+            <button className="square winning-square" onClick={() => props.onClick()}>
+                {props.value}
+            </button>
+        );
+    }
+
     return (
         <button className="square" onClick={() => props.onClick()}>
             {props.value}
