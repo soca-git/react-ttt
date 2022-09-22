@@ -10,15 +10,21 @@ class Game extends React.Component {
 
         this.state = {
             history: [{squares: Array(9).fill(null)}],
-            mostRecentSquares: Array(9).fill(null),
             xIsNext: true,
-            winningPlayer: null
+            winningPlayer: null,
+            stepNumber: 0
         }
         // uplifted the square's state into the game component.
     }
 
+    jumpTo(step) {
+        this.setState({
+            stepNumber: step
+        });
+    }
+
     whenClicked(i) {
-        if (this.state.mostRecentSquares[i] != null)
+        if (this.state.history[this.state.stepNumber][i] != null)
         {
             return;
         }
@@ -30,7 +36,7 @@ class Game extends React.Component {
         }
         // prevent the game from continuing if a player has won.
 
-        const history = this.state.history;
+        const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const currentSquares = this.state.history[history.length - 1].squares;
         const currentSquaresCopy = currentSquares.slice();
         // By copying the square's state into a new object, we are making changes "immutable".
@@ -45,22 +51,34 @@ class Game extends React.Component {
             mostRecentSquares: currentSquaresCopy,
             // concat() doesn't mutate the original history array, like push().
             xIsNext: !this.state.xIsNext,
-            winningPlayer: CalculateWinner(currentSquaresCopy)
+            winningPlayer: CalculateWinner(currentSquaresCopy),
+            stepNumber: history.length
         });
     }
 
     render() {
-        console.log(this.state.history);
+        const history = this.state.history;
+        const currentSquares = history[this.state.stepNumber].squares;
+        console.log(history);
+
+        const moves = history.map((step, move) => {
+            const description = move ? `Go to move ${move}` : `Go to game start`;
+
+            return (
+                <li key={move}>
+                    <button onClick={() => this.jumpTo(move)}>{description}</button>
+                </li>
+            );
+        });
 
         return (
         <div className="game">
             <Status xIsNext={this.state.xIsNext} winningPlayer={this.state.winningPlayer} />
             <div className="game-board">
-            <Board squares={this.state.mostRecentSquares} onClick={(i) => this.whenClicked(i)}/>
+            <Board squares={currentSquares} onClick={(i) => this.whenClicked(i)}/>
             </div>
             <div className="game-info">
-            <div>{/* status */}</div>
-            <ol>{/* TODO */}</ol>
+                <ol>{moves}</ol>
             </div>
         </div>
         );
